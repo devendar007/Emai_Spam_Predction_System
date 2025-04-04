@@ -14,8 +14,17 @@ except AttributeError:
     pass
 
 # ✅ Download required NLTK resources (Uses default directory)
-nltk.download('punkt')
-nltk.download('stopwords')
+import os
+import nltk
+
+# Set a safe local directory for NLTK data
+nltk_data_path = os.path.join(os.path.expanduser("~"), "nltk_data")
+nltk.data.path.append(nltk_data_path)
+
+# Download only if not already downloaded
+nltk.download('punkt', download_dir=nltk_data_path)
+nltk.download('stopwords', download_dir=nltk_data_path)
+
 
 # Initialize stemmer
 ps = PorterStemmer()
