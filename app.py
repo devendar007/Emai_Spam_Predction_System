@@ -2,14 +2,25 @@ import streamlit as st
 import pickle
 import string
 import nltk
+import os
 from nltk.corpus import stopwords
 from nltk.stem.porter import PorterStemmer
 
 
 ps = PorterStemmer()
-nltk.download('punkt')
-nltk.download('stopwords')
-nltk.download('averaged_perceptron_tagger')
+
+
+
+# Define a custom NLTK data directory inside your project
+NLTK_DATA_DIR = os.path.join(os.getcwd(), "nltk_data")
+
+# Append this path to NLTK's search directories
+nltk.data.path.append(NLTK_DATA_DIR)
+
+# Force download required NLTK resources to the local directory
+nltk.download('punkt', download_dir=NLTK_DATA_DIR)
+nltk.download('stopwords', download_dir=NLTK_DATA_DIR)
+
 # Function to clean and transform text
 def transform_text(text):
     text = text.lower()
