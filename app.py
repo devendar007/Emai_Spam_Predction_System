@@ -13,7 +13,18 @@ ps = PorterStemmer()
 nltk.data.path.append("/app/nltk_data")
 
 # Force download required NLTK resources
+
+import ssl
+
+try:
+    _create_unverified_https_context = ssl._create_unverified_context
+    ssl._create_default_https_context = _create_unverified_https_context
+except AttributeError:
+    pass
+
 nltk.download('punkt')
+nltk.download('stopwords')
+
 nltk.download('stopwords')
 
 # Function to clean and transform text
