@@ -6,41 +6,63 @@ import os
 from nltk.corpus import stopwords
 from nltk.stem.porter import PorterStemmer
 
-# ✅ Ensure NLTK data is downloaded (Fixes "stopwords not found" error)
-nltk_data_path = os.path.join(os.path.expanduser("~"), "nltk_data")
-nltk.data.path.append(nltk_data_path)
-
-nltk.download('punkt_tab', download_dir=nltk_data_path)
-nltk.download('stopwords', download_dir=nltk_data_path)
-
 # Initialize stemmer
 ps = PorterStemmer()
 
-# ✅ Function to clean and transform text
+# Ensure Streamlit Cloud finds required NLTK data
+nltk.data.path.append("/app/nltk_data")
+
+# Force download required NLTK resources
+
+import ssl
+
+try:
+    _create_unverified_https_context = ssl._create_unverified_context
+    ssl._create_default_https_context = _create_unverified_https_context
+except AttributeError:
+    pass
+
+nltk.download('punkt')
+nltk.download('stopwords')
+
+
+# Function to clean and transform text
 def transform_text(text):
     text = text.lower()
-    text = nltk.word_tokenize(text)
+    text = nltk.word_tokenize(text)  # Now punkt should be available!
 
-    y = [i for i in text if i.isalnum()]  # Remove non-alphanumeric characters
+    y = []
+    for i in text:
+        if i.isalnum():
+            y.append(i)
 
-    y = [i for i in y if i not in stopwords.words('english') and i not in string.punctuation]  # Remove stopwords & punctuation
+    text = y[:]
+    y.clear()
 
-    y = [ps.stem(i) for i in y]  # Apply stemming
+    for i in text:
+        if i not in stopwords.words('english') and i not in string.punctuation:
+            y.append(i)
+
+    text = y[:]
+    y.clear()
+
+    for i in text:
+        y.append(ps.stem(i))
 
     return " ".join(y)
 
-# ✅ Load model and vectorizer
+# Load model and vectorizer
 tfidf = pickle.load(open('vectorizer.pkl', 'rb'))
 model = pickle.load(open('model.pkl', 'rb'))
 
-# ✅ Set page config
+# Set page config
 st.set_page_config(page_title="Spam Classifier", page_icon="📩", layout="centered")
 
-# ✅ Custom header
+# Custom header
 st.markdown("<h1 style='text-align: center; color: #4B8BBE;'>📩 Email/SMS Spam Classifier</h1>", unsafe_allow_html=True)
 st.markdown("<hr>", unsafe_allow_html=True)
 
-# ✅ Input box
+# Input box
 input_sms = st.text_area("✉️ Enter the message you want to classify", height=150)
 
 if st.button('🚀 Predict'):
@@ -59,7 +81,7 @@ if st.button('🚀 Predict'):
         else:
             st.success("✅ This message is **Not Spam**.")
 
-# ✅ Footer
+# Footer
 st.markdown("""
 ---
 <div style='text-align: center'>
