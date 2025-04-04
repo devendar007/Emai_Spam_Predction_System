@@ -1,57 +1,73 @@
-import pandas as pd
+import streamlit as st
 import pickle
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.naive_bayes import MultinomialNB
-from sklearn.model_selection import train_test_split
+import string
 import nltk
 from nltk.corpus import stopwords
 from nltk.stem.porter import PorterStemmer
 
-nltk.download('punkt')
-nltk.download('stopwords')
-
-# ✅ Load your dataset
-df = pd.read_csv('spam.csv', encoding='latin-1')[['v1', 'v2']]
-df.columns = ['label', 'text']
-df['label'] = df['label'].map({'ham': 0, 'spam': 1})
-
-# ✅ Text preprocessing function
+# Initialize stemmer
 ps = PorterStemmer()
+nltk.download('punkt')
+
+# Function to clean and transform text
 def transform_text(text):
-    import string
     text = text.lower()
     text = nltk.word_tokenize(text)
+
     y = []
     for i in text:
         if i.isalnum():
             y.append(i)
+
     text = y[:]
     y.clear()
+
     for i in text:
         if i not in stopwords.words('english') and i not in string.punctuation:
             y.append(i)
+
     text = y[:]
     y.clear()
+
     for i in text:
         y.append(ps.stem(i))
+
     return " ".join(y)
 
-df['transformed_text'] = df['text'].apply(transform_text)
+# Load model and vectorizer
+tfidf = pickle.load(open('vectorizer.pkl', 'rb'))
+model = pickle.load(open('model.pkl', 'rb'))
 
-# ✅ Train model and vectorizer
-X = df['transformed_text']
-y = df['label']
+# Set page config
+st.set_page_config(page_title="Spam Classifier", page_icon="📩", layout="centered")
 
-tfidf = TfidfVectorizer()
-X_vectorized = tfidf.fit_transform(X)
+# Custom header
+st.markdown("<h1 style='text-align: center; color: #4B8BBE;'>📩 Email/SMS Spam Classifier</h1>", unsafe_allow_html=True)
+st.markdown("<hr>", unsafe_allow_html=True)
 
-X_train, X_test, y_train, y_test = train_test_split(X_vectorized, y, test_size=0.2, random_state=42)
+# Input box
+input_sms = st.text_area("✉️ Enter the message you want to classify", height=150)
 
-model = MultinomialNB()
-model.fit(X_train, y_train)
+if st.button('🚀 Predict'):
+    if input_sms.strip() == "":
+        st.warning("Please enter a message to classify.")
+    else:
+        # 1. Preprocess
+        transformed_sms = transform_text(input_sms)
+        # 2. Vectorize
+        vector_input = tfidf.transform([transformed_sms])
+        # 3. Predict
+        result = model.predict(vector_input)[0]
+        # 4. Display result with emoji
+        if result == 1:
+            st.error("🚨 This message is **Spam**!")
+        else:
+            st.success("✅ This message is **Not Spam**.")
 
-# ✅ Save the fitted vectorizer and model
-pickle.dump(tfidf, open('vectorizer.pkl', 'wb'))
-pickle.dump(model, open('model.pkl', 'wb'))
-
-print("✅ Fitted vectorizer and model saved.")
+# Footer
+st.markdown("""
+---
+<div style='text-align: center'>
+    <small>Builted By: Devendar Singh Rawat</small>
+</div>
+""", unsafe_allow_html=True)
