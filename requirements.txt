@@ -1,6 +1,5 @@
-streamlit
-scikit-learn
 nltk
+scikit-learn
 pandas
 numpy
-pickle-mixin
+streamlit

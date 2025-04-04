@@ -6,25 +6,20 @@ import os
 from nltk.corpus import stopwords
 from nltk.stem.porter import PorterStemmer
 
-
+# Initialize stemmer
 ps = PorterStemmer()
 
+# Ensure Streamlit Cloud finds required NLTK data
+nltk.data.path.append("/app/nltk_data")
 
-
-# Define a custom NLTK data directory inside your project
-NLTK_DATA_DIR = os.path.join(os.getcwd(), "nltk_data")
-
-# Append this path to NLTK's search directories
-nltk.data.path.append(NLTK_DATA_DIR)
-
-# Force download required NLTK resources to the local directory
-nltk.download('punkt', download_dir=NLTK_DATA_DIR)
-nltk.download('stopwords', download_dir=NLTK_DATA_DIR)
+# Force download required NLTK resources
+nltk.download('punkt')
+nltk.download('stopwords')
 
 # Function to clean and transform text
 def transform_text(text):
     text = text.lower()
-    text = nltk.word_tokenize(text)
+    text = nltk.word_tokenize(text)  # Now punkt should be available!
 
     y = []
     for i in text:
