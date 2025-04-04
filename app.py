@@ -2,38 +2,28 @@ import streamlit as st
 import pickle
 import string
 import nltk
-import os
 from nltk.corpus import stopwords
 from nltk.stem.porter import PorterStemmer
-
-# Initialize stemmer
-ps = PorterStemmer()
-
-# Ensure Streamlit Cloud finds required NLTK data
-nltk.data.path.append("/app/nltk_data")
-
-# Force download required NLTK resources
-
-
-
-import nltk
 import ssl
 
+# Fix SSL issues on some cloud servers
 try:
     _create_unverified_https_context = ssl._create_unverified_context
     ssl._create_default_https_context = _create_unverified_https_context
 except AttributeError:
     pass
 
-nltk.data.path.append("/app/nltk_data")  # Ensure the correct path is used
-nltk.download('punkt', download_dir="/app/nltk_data")
-nltk.download('stopwords', download_dir="/app/nltk_data")
+# ✅ Download required NLTK resources (Uses default directory)
+nltk.download('punkt')
+nltk.download('stopwords')
 
+# Initialize stemmer
+ps = PorterStemmer()
 
 # Function to clean and transform text
 def transform_text(text):
     text = text.lower()
-    text = nltk.word_tokenize(text)  # Now punkt should be available!
+    text = nltk.word_tokenize(text)  # ✅ Will work now!
 
     y = []
     for i in text:
