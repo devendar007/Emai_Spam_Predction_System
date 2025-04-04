@@ -5,11 +5,11 @@ import nltk
 from nltk.corpus import stopwords
 from nltk.stem.porter import PorterStemmer
 
-# Initialize stemmer
+
 ps = PorterStemmer()
 nltk.download('punkt')
-nltk.download('stopwords')  # Download stopwords dataset
-
+nltk.download('stopwords')
+nltk.download('averaged_perceptron_tagger')
 # Function to clean and transform text
 def transform_text(text):
     text = text.lower()
