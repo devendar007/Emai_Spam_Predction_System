@@ -14,6 +14,9 @@ nltk.data.path.append("/app/nltk_data")
 
 # Force download required NLTK resources
 
+
+
+import nltk
 import ssl
 
 try:
@@ -22,10 +25,10 @@ try:
 except AttributeError:
     pass
 
-nltk.download('punkt')
-nltk.download('stopwords')
+nltk.data.path.append("/app/nltk_data")  # Ensure the correct path is used
+nltk.download('punkt', download_dir="/app/nltk_data")
+nltk.download('stopwords', download_dir="/app/nltk_data")
 
-nltk.download('stopwords')
 
 # Function to clean and transform text
 def transform_text(text):
