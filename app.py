@@ -26,13 +26,14 @@ ps = PorterStemmer()
 # Function to clean and transform text
 def transform_text(text):
     text = text.lower()
-    text = nltk.word_tokenize(text)
+    text = text.split()  # replaces nltk.word_tokenize
 
     y = [i for i in text if i.isalnum()]
     y = [i for i in y if i not in stop_words]
     y = [ps.stem(i) for i in y]
 
     return " ".join(y)
+
 
 # Load model and vectorizer
 tfidf = pickle.load(open('vectorizer.pkl', 'rb'))
