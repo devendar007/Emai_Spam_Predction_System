@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9b75816b-9153-4c40-83a4-4d9f33594c8f" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/model (1).pkl" beforeDir="false" afterPath="$PROJECT_DIR$/model.pkl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vectorizer (1).pkl" beforeDir="false" afterPath="$PROJECT_DIR$/vectorizer.pkl" afterDir="false" />
-    </list>
+    <list default="true" id="9b75816b-9153-4c40-83a4-4d9f33594c8f" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
