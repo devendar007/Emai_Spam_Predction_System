@@ -67,6 +67,6 @@ if st.button('🚀 Predict'):
 st.markdown("""
 ---
 <div style='text-align: center'>
-    <small>Built By: Devendar Singh Rawat</small>
+    <small>Builted By: Devendar Singh Rawat</small>
 </div>
 """, unsafe_allow_html=True)
